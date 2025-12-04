@@ -107,15 +107,6 @@ public class DriveToPosition extends Command {
             ySpeedFromPolar = 0;
         }
 
-        if (Robot.DRIVE_TO_POSITION_DEBUG) {
-        SmartDashboard.putNumber("combinedSpeed", combinedSpeed);
-        SmartDashboard.putNumber("xSpeedFromPolar", xSpeedFromPolar);
-        SmartDashboard.putNumber("ySpeedFromPolar", ySpeedFromPolar);
-        SmartDashboard.putNumber("angleRJIEOFOS", angle * (180/Math.PI));
-        SmartDashboard.putNumber("cR", currentR);
-        SmartDashboard.putNumber("dCXGX", distCxGx);
-        }
-
         Optional<Alliance> ally = DriverStation.getAlliance();
 
         if (ally.get() == Alliance.Blue) {

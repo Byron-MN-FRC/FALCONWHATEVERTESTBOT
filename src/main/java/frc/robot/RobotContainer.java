@@ -4,12 +4,13 @@
 
 package frc.robot;
 
-import static edu.wpi.first.units.Units.*;
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -18,12 +19,8 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
-import frc.robot.commands.DriveToFeeder;
 import frc.robot.commands.DriveToPosition;
-import frc.robot.commands.SocialDistancing;
 import frc.robot.generated.TunerConstants;
-import frc.robot.subsystems.AlignmentSubsystem;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Vision;
 
@@ -45,7 +42,6 @@ public class RobotContainer {
 
     public final Vision m_vision = new Vision();
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
-    public final AlignmentSubsystem m_alignmentSubsystem = new AlignmentSubsystem();
 
     /* Fields */
     public Field2d field = new Field2d();
@@ -93,13 +89,6 @@ public class RobotContainer {
 
         joystick.b().whileTrue(
                 new DriveToPosition(drivetrain, Constants.VisionConstants.limelightName)
-                        .withInterruptBehavior(InterruptionBehavior.kCancelSelf));
-
-        joystick.x().whileTrue(
-                new SocialDistancing(drivetrain, m_alignmentSubsystem));
-        
-        joystick.a().whileTrue(
-                new DriveToFeeder(drivetrain, Constants.VisionConstants.limelightName2, m_alignmentSubsystem)
                         .withInterruptBehavior(InterruptionBehavior.kCancelSelf));
 
         // Run SysId routines when holding back/start and X/Y.
