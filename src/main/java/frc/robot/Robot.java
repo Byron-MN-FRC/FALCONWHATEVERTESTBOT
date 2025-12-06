@@ -62,7 +62,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousExit() {
     kUseLimelight = true;
-    Robot.getInstance().m_vision.tempDisable = false;
+    // Robot.getInstance().m_vision.tempDisable = false;
   
   }
 

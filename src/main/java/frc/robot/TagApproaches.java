@@ -122,10 +122,10 @@ public class TagApproaches {
         pose = addTagCentricOffset(pose, Constants.VisionConstants.ReefTagOffset);
         tagArray[21] = new TagApproach(22, Alliance.Blue, gameTarget.Reef, pose);
 
-        // numbers past this point are not tags, but rather user specifified positions
-        // not used in competition, but exists as a proof of concept
-        // pose = calcNewPose(4, 7, 0);
-        // tagArray[22] = new TagApproach("testPose1", Alliance.Red, gameTarget.Reef, pose);
+    //     // numbers past this point are not tags, but rather user specifified positions
+    //     // not used in competition, but exists as a proof of concept
+    //     // pose = calcNewPose(4, 7, 0);
+    //     // tagArray[22] = new TagApproach("testPose1", Alliance.Red, gameTarget.Reef, pose);
     }
 
     private Pose2d calcNewPose(int id, double arbX, double arbY, double arbAngle) {
@@ -136,22 +136,22 @@ public class TagApproaches {
                 new Rotation2d(tagPose.getRotation().getRadians()/* + Math.toRadians(arbAngle) + Math.PI*/));
     }
 
-    /* used to return a pose when the goal position is not measured from an April Tag */
-    private Pose2d calcNewPose(double arbX, double arbY, double arbAngle) {
-        return new Pose2d(arbX, arbY, new Rotation2d(Math.toRadians(arbAngle)));
-    }
+    // /* used to return a pose when the goal position is not measured from an April Tag */
+    // private Pose2d calcNewPose(double arbX, double arbY, double arbAngle) {
+    //     return new Pose2d(arbX, arbY, new Rotation2d(Math.toRadians(arbAngle)));
+    // }
 
-    public int FiduciaryNumber(int tagID) {
-        return tagArray[tagID - 1].FiduciaryNumber();
-    }
+    // public int FiduciaryNumber(int tagID) {
+    //     return tagArray[tagID - 1].FiduciaryNumber();
+    // }
 
-    public Alliance TagAlliance(int tagID) {
-        return tagArray[tagID - 1].TagAlliance();
-    }
+    // public Alliance TagAlliance(int tagID) {
+    //     return tagArray[tagID - 1].TagAlliance();
+    // }
 
-    public gameTarget GameTarget(int tagID) {
-        return tagArray[tagID - 1].GameTarget();
-    }
+    // public gameTarget GameTarget(int tagID) {
+    //     return tagArray[tagID - 1].GameTarget();
+    // }
 
     public Pose2d DesiredRobotPos(int tagID) {
         int indexInArray = tagID - 1;
@@ -164,28 +164,15 @@ public class TagApproaches {
         
         Pose2d goalPose = tagArray[indexInArray].DesiredPos();
 
-        if (tagArray[indexInArray].GameTarget() == gameTarget.Reef){ 
-            return shiftReefAllign(goalPose);
-        }
-        if (tagArray[indexInArray].GameTarget() == gameTarget.CoralStation){
-            return shiftFeederAllign(goalPose);
-        }
-
         return goalPose;
     }
 
-    public Pose2d TagFieldPose2d(int tagID) {
-        return FieldLayout.getTagPose(tagID).get().toPose2d();
-    }
+    // public Pose2d TagFieldPose2d(int tagID) {
+    //     return FieldLayout.getTagPose(tagID).get().toPose2d();
+    // }
 
-    public double getTagAngle(int tagID) {
-        return FieldLayout.getTagPose(tagID).get().getRotation().toRotation2d().getDegrees();
-    }
-
-    /* un-finished test method to rotate poses not associated with tags around the center of the field */
-    // public Pose2d RotatePose2d(int arrayIndex) {
-    //     Pose2d oppOrigin = new Pose2d(FieldLayout.getFieldLength(), FieldLayout.getFieldWidth(), new Rotation2d(Math.PI));
-    //     return tagArray[arrayIndex].DesiredPos().relativeTo(oppOrigin);
+    // public double getTagAngle(int tagID) {
+    //     return FieldLayout.getTagPose(tagID).get().getRotation().toRotation2d().getDegrees();
     // }
     
     public Pose2d addTagCentricOffset(Pose2d goalBeforeShift, Pose2d offsetTagRelative) { //goalBeforeShift if field relative ||| offsetTagRelative is tagRelative
@@ -199,89 +186,6 @@ public class TagApproaches {
         Translation2d newTranslation = TagTranslation.plus(fieldOrientedOffset);
         Pose2d newPose = new Pose2d(newTranslation, TagAngle.plus(offsetRotation));
         
-        // if (Robot.VISIONTEST) {
-        //     System.out.println("goalBS" + goalBeforeShift);
-        //     System.out.println("offsetTR" + offsetTagRelative);
-        //     System.out.println("tA" + TagAngle);
-        //     System.out.println("tagT" + TagTranslation);
-        //     System.out.println("fieldOO" + fieldOrientedOffset);
-        //     System.out.println("newT" + newTranslation);
-        // }
-        
         return newPose;
-    }
-
-    public Pose2d shiftReefAllign(Pose2d goalBeforeShift) {
-        double offset = 0;
-
-        if (Constants.Selector.PlacementSelector.getScoringPose() == Constants.Selector.PlacementSelector.left) {
-            offset = 0.1234;
-            // if (Robot.VISIONTEST) System.out.println("moving left");
-        } else if (Constants.Selector.PlacementSelector.getScoringPose() == Constants.Selector.PlacementSelector.right) {
-            offset = -0.235;
-            // if (Robot.VISIONTEST) System.out.println("moving right");
-        } else {
-            offset = 0;
-            // if (Robot.VISIONTEST) System.out.println("staying in the center");
-            
-        }
-
-        Rotation2d goalAngle = goalBeforeShift.getRotation();
-        Translation2d oldTranslation = goalBeforeShift.getTranslation();
-        Translation2d offsetTranslation = new Translation2d(offset, goalAngle.plus(Rotation2d.fromDegrees(90)));
-        Translation2d newGoalTranslation = oldTranslation.plus(offsetTranslation);
-
-        return new Pose2d(newGoalTranslation, goalAngle);
-    }
-    
-    public Pose2d shiftFeederAllign(Pose2d goalBeforeShift) {
-        double offset = 0;
-        // closer is +-25.75, farther is +-15.75
-        if (goalBeforeShift.getX() > Constants.VisionConstants.fieldLength / 2) {
-            
-            if (goalBeforeShift.getY() > Constants.VisionConstants.fieldWidth / 2) {
-                // top right
-                if (Constants.Selector.PlacementSelector.getScoringPose() == Constants.Selector.PlacementSelector.left) {
-                    offset = Units.inchesToMeters(25.75);
-                } else if (Constants.Selector.PlacementSelector.getScoringPose() == Constants.Selector.PlacementSelector.right) {
-                    offset = Units.inchesToMeters(-15.75);
-                }
-            } else {
-                // bottom right
-                if (Constants.Selector.PlacementSelector.getScoringPose() == Constants.Selector.PlacementSelector.left) {
-                    offset = Units.inchesToMeters(15.75);
-                } else if (Constants.Selector.PlacementSelector.getScoringPose() == Constants.Selector.PlacementSelector.right) {
-                    offset = Units.inchesToMeters(-25.75);
-                }
-            }
-
-        } else {
-
-            if (goalBeforeShift.getY() > Constants.VisionConstants.fieldWidth / 2) {
-                // top left
-                if (Constants.Selector.PlacementSelector.getScoringPose() == Constants.Selector.PlacementSelector.left) {
-                    offset = Units.inchesToMeters(15.75);
-                } else if (Constants.Selector.PlacementSelector.getScoringPose() == Constants.Selector.PlacementSelector.right) {
-                    offset = Units.inchesToMeters(-25.75);
-                }
-
-            } else {
-                // bottom left
-                if (Constants.Selector.PlacementSelector.getScoringPose() == Constants.Selector.PlacementSelector.left) {
-                    offset = Units.inchesToMeters(25.75);
-                } else if (Constants.Selector.PlacementSelector.getScoringPose() == Constants.Selector.PlacementSelector.right) {
-                    offset = Units.inchesToMeters(-15.75);
-                }
-                
-            }
-
-        }
-
-        Rotation2d goalAngle = goalBeforeShift.getRotation();
-        Translation2d oldTranslation = goalBeforeShift.getTranslation();
-        Translation2d offsetTranslation = new Translation2d(offset, goalAngle.plus(Rotation2d.fromDegrees(90)));
-        Translation2d newGoalTranslation = oldTranslation.plus(offsetTranslation);
-
-        return new Pose2d(newGoalTranslation, goalAngle);
     }
 }

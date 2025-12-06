@@ -84,8 +84,8 @@ public class RobotContainer {
         // joystick.b().whileTrue(drivetrain.applyRequest(
                 // () -> point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))));
 
-        joystick.start().onTrue(new InstantCommand(() -> m_vision.tempDisable(0.5))
-                .andThen(drivetrain.runOnce(() -> drivetrain.seedFieldCentric())));
+        // joystick.start().onTrue(new InstantCommand(() -> m_vision.tempDisable(0.5))
+        //         .andThen(drivetrain.runOnce(() -> drivetrain.seedFieldCentric())));
 
         joystick.b().whileTrue(
                 new DriveToPosition(drivetrain, Constants.VisionConstants.limelightName)
@@ -99,7 +99,7 @@ public class RobotContainer {
         // joystick.start().and(joystick.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
 
         // reset the field-centric heading on left bumper press
-        // joystick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
+        joystick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
         drivetrain.registerTelemetry(logger::telemeterize);
     }

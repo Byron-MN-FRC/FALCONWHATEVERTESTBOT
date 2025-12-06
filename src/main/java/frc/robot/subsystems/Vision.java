@@ -1,16 +1,8 @@
 package frc.robot.subsystems;
 
-import java.util.Optional;
-
 import com.ctre.phoenix6.Utils;
-import com.pathplanner.lib.commands.PathPlannerAuto;
-import com.pathplanner.lib.util.FlippingUtil;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
@@ -19,9 +11,9 @@ import frc.robot.Robot;
 public class Vision extends SubsystemBase {
 
     private static final Vision m_Vision = new Vision();
-    public boolean tempDisable = false;
-    public double timestampToReEnable;
-    private Pose2d autoStartPose = new Pose2d();
+    // public boolean tempDisable = false;
+    // public double timestampToReEnable;
+    // private Pose2d autoStartPose = new Pose2d();
     public int lastTargetFront = 1;
     public int lastTargetBack = 1;
 
@@ -42,43 +34,43 @@ public class Vision extends SubsystemBase {
         updateTargetData(Constants.VisionConstants.limelightName);
         updateTargetData(Constants.VisionConstants.limelightName2);
         
-        if (timestampToReEnable < Utils.getCurrentTimeSeconds() &&tempDisable  == true){
-            tempDisable = false; 
-        }
+        // if (timestampToReEnable < Utils.getCurrentTimeSeconds() &&tempDisable  == true){
+        //     tempDisable = false; 
+        // }
 
-        if (DriverStation.isAutonomous() && !DriverStation.isEnabled()) {
-            // For auto set-up
-            if (!autoStartPose.equals(new Pose2d())) {
-                Translation2d currentT2D = Robot.getInstance().drivetrain.getState().Pose.getTranslation();
-                double distance = autoStartPose.getTranslation().getDistance(currentT2D);
-                // difference between the goal angle and current angle arccos(cos(a-b))
-                double rot_distance = Math.acos(autoStartPose.getRotation().getCos() * 
-                     Robot.getInstance().drivetrain.getState().Pose.getRotation().getCos() + 
-                     autoStartPose.getRotation().getSin() * 
-                     Robot.getInstance().drivetrain.getState().Pose.getRotation().getSin());
+        // if (DriverStation.isAutonomous() && !DriverStation.isEnabled()) {
+        //     // For auto set-up
+        //     if (!autoStartPose.equals(new Pose2d())) {
+        //         Translation2d currentT2D = Robot.getInstance().drivetrain.getState().Pose.getTranslation();
+        //         double distance = autoStartPose.getTranslation().getDistance(currentT2D);
+        //         // difference between the goal angle and current angle arccos(cos(a-b))
+        //         double rot_distance = Math.acos(autoStartPose.getRotation().getCos() * 
+        //              Robot.getInstance().drivetrain.getState().Pose.getRotation().getCos() + 
+        //              autoStartPose.getRotation().getSin() * 
+        //              Robot.getInstance().drivetrain.getState().Pose.getRotation().getSin());
 
-                // SmartDashboard.putNumber("Auto config distance", distance);
-                // SmartDashboard.putNumber("Auto config rotation distance", rot_distance);
-                if (distance < 0.2 && (Units.radiansToDegrees(rot_distance) < 4)) {
+        //         // SmartDashboard.putNumber("Auto config distance", distance);
+        //         // SmartDashboard.putNumber("Auto config rotation distance", rot_distance);
+        //         if (distance < 0.2 && (Units.radiansToDegrees(rot_distance) < 4)) {
 
-                    LimelightHelpers.setLEDMode_ForceOn(Constants.VisionConstants.limelightName);
-                } else {
-                    LimelightHelpers.setLEDMode_ForceOff(Constants.VisionConstants.limelightName);
-                }
-            } else {
-                LimelightHelpers.setLEDMode_ForceOff(Constants.VisionConstants.limelightName);
-            }
-        }
+        //             LimelightHelpers.setLEDMode_ForceOn(Constants.VisionConstants.limelightName);
+        //         } else {
+        //             LimelightHelpers.setLEDMode_ForceOff(Constants.VisionConstants.limelightName);
+        //         }
+        //     } else {
+        //         LimelightHelpers.setLEDMode_ForceOff(Constants.VisionConstants.limelightName);
+        //     }
+        // }
     }
     
-    public Alliance MyAlliance() {
-        Optional<Alliance> ally = DriverStation.getAlliance();
-        if (ally.isPresent()) {
-            return ally.get() == Alliance.Red ? Alliance.Red : Alliance.Blue;
-        } else {
-            return null;
-        }
-    }
+    // public Alliance MyAlliance() {
+    //     Optional<Alliance> ally = DriverStation.getAlliance();
+    //     if (ally.isPresent()) {
+    //         return ally.get() == Alliance.Red ? Alliance.Red : Alliance.Blue;
+    //     } else {
+    //         return null;
+    //     }
+    // }
 
     public void updateTargetData(String llName) {
         if (LimelightHelpers.getTV(llName)) {
@@ -95,40 +87,40 @@ public class Vision extends SubsystemBase {
         }
     }
     
-    /**
-     *  Temporarily disables the addVisionMeasurements method in Robot.java
-     *  
-     *  The purpose of this method is to remove errors caused during resetting
-     *  the rotation of the robot when the cameras can see an April Tag
-     * 
-     *  @Param seconds The time period to disable for (tested at .5 seconds)
-     *  @return void
-     */
-    public void tempDisable(double seconds) {
-        tempDisable = true;
-        double currentTime = Utils.getCurrentTimeSeconds();
-        timestampToReEnable = currentTime + seconds;
-    }
+    // /**
+    //  *  Temporarily disables the addVisionMeasurements method in Robot.java
+    //  *  
+    //  *  The purpose of this method is to remove errors caused during resetting
+    //  *  the rotation of the robot when the cameras can see an April Tag
+    //  * 
+    //  *  @Param seconds The time period to disable for (tested at .5 seconds)
+    //  *  @return void
+    //  */
+    // public void tempDisable(double seconds) {
+    //     tempDisable = true;
+    //     double currentTime = Utils.getCurrentTimeSeconds();
+    //     timestampToReEnable = currentTime + seconds;
+    // }
 
-    public void updateAutoStartPosition(String autoName) {
+    // public void updateAutoStartPosition(String autoName) {
 
-        // Instant Command is the name of the "None" Auto
+    //     // Instant Command is the name of the "None" Auto
 
-        if (!autoName.equals("InstantCommand")) {
-            try {
-                autoStartPose = PathPlannerAuto.getPathGroupFromAutoFile(autoName).get(0).getStartingDifferentialPose(); 
-            } catch (Exception e){
-                System.out.println(e.getMessage());
-                autoStartPose = new Pose2d();
-            }
-            if (DriverStation.getAlliance().get() == Alliance.Red) {
-                autoStartPose = FlippingUtil.flipFieldPose(autoStartPose);
-            }
-        } else {
-            autoStartPose = new Pose2d();
-        } 
+    //     if (!autoName.equals("InstantCommand")) {
+    //         try {
+    //             autoStartPose = PathPlannerAuto.getPathGroupFromAutoFile(autoName).get(0).getStartingDifferentialPose(); 
+    //         } catch (Exception e){
+    //             System.out.println(e.getMessage());
+    //             autoStartPose = new Pose2d();
+    //         }
+    //         if (DriverStation.getAlliance().get() == Alliance.Red) {
+    //             autoStartPose = FlippingUtil.flipFieldPose(autoStartPose);
+    //         }
+    //     } else {
+    //         autoStartPose = new Pose2d();
+    //     } 
 
-    }
+    // }
 
     public void updatePoseEstimator() {
     
@@ -151,7 +143,7 @@ public class Vision extends SubsystemBase {
   
         LimelightHelpers.SetRobotOrientation(Constants.VisionConstants.limelightName, headingDeg, 0, 0, 0, 0, 0);
         var llMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(Constants.VisionConstants.limelightName);
-        if (llMeasurement != null && llMeasurement.tagCount > 0 && omegaRps < 1.5 && !Robot.getInstance().m_vision.tempDisable) {
+        if (llMeasurement != null && llMeasurement.tagCount > 0 && omegaRps < 1.5 /* && !Robot.getInstance().m_vision.tempDisable */) {
           Robot.getInstance().drivetrain.addVisionMeasurement(llMeasurement.pose,
               Utils.fpgaToCurrentTime(llMeasurement.timestampSeconds));
         }
