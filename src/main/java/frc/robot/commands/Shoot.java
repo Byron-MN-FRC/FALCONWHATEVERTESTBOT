@@ -53,7 +53,7 @@ public class Shoot extends Command {
  
         timer.reset();
         timer.start();
-        lightStrip.setLED(4, 8, 59);
+        lightStrip.setLED(1, 4, 8, 59);
     }
 
     // Called every time the scheduler runs while the command is scheduled.
@@ -64,7 +64,7 @@ public class Shoot extends Command {
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        lightStrip.setLED(0, 0, 0);
+        lightStrip.setLED(1, 0, 0, 0);
         timer.stop();
     }
 

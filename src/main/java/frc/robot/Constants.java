@@ -25,8 +25,12 @@ public class Constants {
     *   public static final int kLeftMotor1Port = 0;
     *   public static final int kLeftMotor2Port = 1;
     *   public static final int kRightMotor1Port = 2;
-    *   public static final int kRightMotor2Port = 3; 
+    *   public static final int kRightMotor2Port = 3;
     * }
-    */ 
-}
+    */
 
+    public static final class LEDConstants {
+        public static final int LED_PORT = 1;
+        public static final int[] LED_LENGTHS = {8, 8};
+    }
+}

@@ -51,7 +51,7 @@ public class GroundIntake extends Command {
     @Override
     public void initialize() {
         lightStrip = Robot.getInstance().lightStrip;
-        lightStrip.setLED(255, 255, 0);
+        lightStrip.setLED(0, 255, 255, 0);
     }
 
     // Called every time the scheduler runs while the command is scheduled.
@@ -63,9 +63,9 @@ public class GroundIntake extends Command {
     @Override
     public void end(boolean interrupted) {
         if (Robot.getInstance().joystick.rightTrigger().getAsBoolean()) {
-           lightStrip.setLED(255, 0, 0);
+           lightStrip.setLED(0, 255, 0, 0);
         } else {
-            lightStrip.setLED(0, 0, 0);
+            lightStrip.setLED(0, 0, 0, 0);
         }
     }
 
