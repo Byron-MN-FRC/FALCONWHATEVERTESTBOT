@@ -45,41 +45,27 @@ public class ColorLED {
         }
     }
 
-    /**
-     * Sets all LED strips to the same color.
-     * @param red red value 0-255
-     * @param green green value 0-255
-     * @param blue blue value 0-255
-     */
-    public void setLED(int red, int green, int blue) {
-        // TODO test whether inputs greater than 255 or less than 0 need to be clamped
+    public static final int INTAKE = 0; // First 8 LEDs (0-7)
+    public static final int SHOOTER = 1; // Second 8 LEDs (8-15)
+    
+    private static final int LEDS_PER_STRIP = 8;
 
-        for (var i = 0; i < m_ledBuffer.getLength(); i++) {
-            // Set the value
-            m_ledBuffer.setRGB(i, red, green, blue);
-        }
-
-        m_led.setData(m_ledBuffer);
-
-    }
-
-    /**
-     * Sets a specific LED strip to a color.
-     * @param stripIndex index of the strip (0-based)
-     * @param red red value 0-255
-     * @param green green value 0-255
-     * @param blue blue value 0-255
-     */
     public void setLED(int stripIndex, int red, int green, int blue) {
-        // TODO test whether inputs greater than 255 or less than 0 need to be clamped
+        // Clamp values to valid range
+        int r = Math.max(0, Math.min(255, red));
+        int g = Math.max(0, Math.min(255, green));
+        int b = Math.max(0, Math.min(255, blue));
 
-        AddressableLEDBufferView view = ledBuffers.get(stripIndex);
-        for (int i = 0; i < view.getLength(); i++) {
-            // Set the value
-            view.setRGB(i, red, green, blue);
+        int startIndex = stripIndex * LEDS_PER_STRIP;
+
+        for (int i = 0; i < LEDS_PER_STRIP; i++) {
+            int bufferIndex = startIndex + i;
+            
+
+            if (bufferIndex < m_ledBuffer.getLength()) {
+                m_ledBuffer.setRGB(bufferIndex, r, g, b);
+            }
         }
-
         m_led.setData(m_ledBuffer);
-
     }
 }
