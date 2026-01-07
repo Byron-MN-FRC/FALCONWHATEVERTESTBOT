@@ -11,10 +11,7 @@
 // ROBOTBUILDER TYPE: Command.
 
 package frc.robot.commands;
-import org.w3c.dom.css.RGBColor;
-
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.ColorLED;
 import frc.robot.Robot;
 
@@ -63,11 +60,11 @@ public class GroundIntake extends Command {
     @Override
     public void end(boolean interrupted) {
         lightStrip.setLED(ColorLED.INTAKE, 0, 0, 0);
-        
+
         if (Robot.getInstance().joystick.rightTrigger().getAsBoolean()) {
             lightStrip.setLED(ColorLED.SHOOTER, 255, 0, 0);
         } else {
-            lightStrip.setLED(ColorLED.SHOOTER, 0, 0, 0);     
+            lightStrip.setLED(ColorLED.SHOOTER, 0, 0, 0);
         }
     }
 

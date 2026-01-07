@@ -13,6 +13,7 @@ import java.util.List;
 public class ColorLED {
     private AddressableLEDBuffer m_ledBuffer;
     public AddressableLED m_led;
+    // Note: buffer views are necessary because the RIO only works with 1 LED strip, this will be unecessary when SystemCore is rolled out late 2026 2027
     private List<AddressableLEDBufferView> ledBuffers;
 
     /**
